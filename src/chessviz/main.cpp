@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <windows.h>
+
 using namespace std;
 
 struct tarifs {
@@ -13,8 +14,8 @@ struct tarifs {
     int gigabytes;
 };
 
-#include "CheckTarif.h"
-#include "Output.h"
+#include <libchessviz/CheckTarif.h>
+#include <libchessviz/Output.h>
 
 tarifs* InputVtabl(int n, string tarifOperatorFile)
 {
@@ -70,8 +71,6 @@ int main()
     int Operator;
     int N;
     int RequiredIndicators;
-    int Difference;
-    int StrokSum;
     int StrokNumber;
     string tarifOperatorFile;
 
@@ -99,6 +98,4 @@ int main()
     RequiredIndicators = Gig + SMS + Minut;
     StrokNumber = CheckTarif(tarif, N, RequiredIndicators);
     Output(tarif, StrokNumber);
-    /*cout << tarif[StrokNumber].name << "\t" << tarif[StrokNumber].minutes<<
-     * "\t" << tarif[StrokNumber].sms << "\t"<< tarif[StrokNumber].gigabytes;*/
 }

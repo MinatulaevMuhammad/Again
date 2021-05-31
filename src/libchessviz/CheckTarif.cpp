@@ -6,8 +6,7 @@
 #include <windows.h>
 using namespace std;
 
-struct tarifs 
-{
+struct tarifs {
     string name;
     int minutes;
     int sms;

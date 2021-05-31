@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 #include <inttypes.h> /* intmax_t, uintmax_t, PRI* */
-#include <stddef.h>> /* size_t */
+#include <stddef.h> /* size_t */
 
 typedef void (*ctest_nullary_run_func)(void);
 typedef void (*ctest_unary_run_func)(void*);
@@ -20,40 +20,40 @@ typedef void (*ctest_setup_func)(void*);
 typedef void (*ctest_teardown_func)(void*);
 
 union ctest_run_func_union {
- ctest_nullary_run_func nullary;
- ctest_unary_run_func unary;
+    ctest_nullary_run_func nullary;
+    ctest_unary_run_func unary;
 };
 
 #define CTEST_IMPL_PRAGMA(x) _Pragma (#x)
 
 #if defined(__GNUC__)
 #if defined(__clang__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-/* the GCC argument will work for both gcc and clang */
+/* the GCC argument will work for both gcc and clang  */
 #define CTEST_IMPL_DIAG_PUSH_IGNORED(w) \
     CTEST_IMPL_PRAGMA(GCC diagnostic push) \
- CTEST_IMPL_PRAGMA(GCC diagnostic ignored "-W" #w)
+    CTEST_IMPL_PRAGMA(GCC diagnostic ignored "-W" #w)
 #define CTEST_IMPL_DIAG_POP() \
     CTEST_IMPL_PRAGMA(GCC diagnostic pop)
 #else
-/* the push/pop functionality wasn't in gcc until 4.6, fallback to "ignored" */
+/* the push/pop functionality wasn't in gcc until 4.6, fallback to "ignored"  */
 #define CTEST_IMPL_DIAG_PUSH_IGNORED(w) \
     CTEST_IMPL_PRAGMA(GCC diagnostic ignored "-W" #w)
 #define CTEST_IMPL_DIAG_POP()
 #endif
 #else
-/* leave them out entirely for non-GNUC compilers */
+/* leave them out entirely for non-GNUC compilers  */
 #define CTEST_IMPL_DIAG_PUSH_IGNORED(w)
 #define CTEST_IMPL_DIAG_POP()
 #endif
 
 struct ctest {
-    const char* ssname; // suite name
-    const char* ttname; // test name
+    const char* ssname;  // suite name
+    const char* ttname;  // test name
     union ctest_run_func_union run;
 
     void* data;
- ctest_setup_func* setup;
- ctest_teardown_func* teardown;
+    ctest_setup_func* setup;
+    ctest_teardown_func* teardown;
 
     int skip;
 
@@ -149,7 +149,7 @@ struct ctest {
 #endif
 
 void CTEST_LOG(const char* fmt, ...) CTEST_IMPL_FORMAT_PRINTF(1, 2);
-void CTEST_ERR(const char* fmt, ...) CTEST_IMPL_FORMAT_PRINTF(1, 2); // doesn't return
+void CTEST_ERR(const char* fmt, ...) CTEST_IMPL_FORMAT_PRINTF(1, 2);  // doesn't return
 
 #define CTEST(sname, tname) CTEST_IMPL_CTEST(sname, tname, 0)
 #define CTEST_SKIP(sname, tname) CTEST_IMPL_CTEST(sname, tname, 1)
@@ -383,7 +383,7 @@ void assert_dbl_near(double exp, double real, double tol, const char* caller, in
     double absdiff = diff;
     /* avoid using fabs and linking with a math lib */
     if(diff < 0) {
- absdiff *= -1;
+      absdiff *= -1;
     }
     if (absdiff > tol) {
         CTEST_ERR("%s:%d  expected %0.3e, got %0.3e (diff %0.3e, tol %0.3e)", caller, line, exp, real, diff, tol);
@@ -395,7 +395,7 @@ void assert_dbl_far(double exp, double real, double tol, const char* caller, int
     double absdiff = diff;
     /* avoid using fabs and linking with a math lib */
     if(diff < 0) {
- absdiff *= -1;
+      absdiff *= -1;
     }
     if (absdiff <= tol) {
         CTEST_ERR("%s:%d  expected %0.3e, got %0.3e (diff %0.3e, tol %0.3e)", caller, line, exp, real, diff, tol);
@@ -404,7 +404,7 @@ void assert_dbl_far(double exp, double real, double tol, const char* caller, int
 
 void assert_null(void* real, const char* caller, int line) {
     if ((real) != NULL) {
-        CTEST_ERR("%s:%d should be NULL", caller, line);
+        CTEST_ERR("%s:%d  should be NULL", caller, line);
     }
 }
 
@@ -432,7 +432,7 @@ void assert_fail(const char* caller, int line) {
 
 
 static int suite_all(struct ctest* t) {
- (void) t; // fix unused parameter warning
+    (void) t; // fix unused parameter warning
     return 1;
 }
 
@@ -444,8 +444,8 @@ static uint64_t getCurrentTime(void) {
     struct timeval now;
     gettimeofday(&now, NULL);
     uint64_t now64 = (uint64_t) now.tv_sec;
- now64 *= 1000000;
- now64 += ((uint64_t) now.tv_usec);
+    now64 *= 1000000;
+    now64 += ((uint64_t) now.tv_usec);
     return now64;
 }
 
@@ -489,13 +489,13 @@ __attribute__((no_sanitize_address)) int ctest_main(int argc, const char *argv[]
 #endif
 
     if (argc == 2) {
- suite_name = argv[1];
- filter = suite_filter;
+        suite_name = argv[1];
+        filter = suite_filter;
     }
 #ifdef CTEST_NO_COLORS
- color_output = 0;
+    color_output = 0;
 #else
- color_output = isatty(1);
+    color_output = isatty(1);
 #endif
     uint64_t t1 = getCurrentTime();
 
@@ -530,15 +530,15 @@ __attribute__((no_sanitize_address)) int ctest_main(int argc, const char *argv[]
             fflush(stdout);
             if (test->skip) {
                 color_print(ANSI_BYELLOW, "[SKIPPED]");
- num_skip++;
- } else {
+                num_skip++;
+            } else {
                 int result = setjmp(ctest_err);
                 if (result == 0) {
                     if (test->setup && *test->setup) (*test->setup)(test->data);
                     if (test->data)
- test->run.unary(test->data);
+                        test->run.unary(test->data);
                     else
- test->run.nullary();
+                        test->run.nullary();
                     if (test->teardown && *test->teardown) (*test->teardown)(test->data);
                     // if we got here it's ok
 #ifdef CTEST_COLOR_OK
@@ -546,14 +546,14 @@ __attribute__((no_sanitize_address)) int ctest_main(int argc, const char *argv[]
 #else
                     printf("[OK]\n");
 #endif
- num_ok++;
- } else {
+                    num_ok++;
+                } else {
                     color_print(ANSI_BRED, "[FAIL]");
- num_fail++;
+                    num_fail++;
                 }
                 if (ctest_errorsize != MSG_SIZE-1) printf("%s", ctest_errorbuffer);
             }
- idx++;
+            idx++;
         }
     }
     uint64_t t2 = getCurrentTime();

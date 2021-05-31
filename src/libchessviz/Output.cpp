@@ -6,8 +6,7 @@
 #include <windows.h>
 using namespace std;
 
-struct tarifs 
-{
+struct tarifs {
     string name;
     int minutes;
     int sms;
@@ -16,5 +15,7 @@ struct tarifs
 
 void Output(tarifs* tarif, int StrokNumber)
 {
-    cout << tarif[StrokNumber].name << "\t" << tarif[StrokNumber].minutes<< "\t" << tarif[StrokNumber].sms << "\t"<< tarif[StrokNumber].gigabytes << endl;
+    cout << tarif[StrokNumber].name << "\t" << tarif[StrokNumber].minutes
+         << "\t" << tarif[StrokNumber].sms << "\t"
+         << tarif[StrokNumber].gigabytes << endl;
 }
